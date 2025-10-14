@@ -22,7 +22,7 @@ namespace SalesManagementService.Application.Features.Sales.Commands
             private readonly IMapper _mapper;
             private readonly ILogger<CreateCustomerCommandHandler> _logger;
             private readonly IValidator<CreateCustomerCommand> _validator;
-
+           
             public CreateCustomerCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger<CreateCustomerCommandHandler> logger, IValidator<CreateCustomerCommand> validator)
             {
                 _unitOfWork = unitOfWork;
@@ -30,7 +30,13 @@ namespace SalesManagementService.Application.Features.Sales.Commands
                 _mapper = mapper;
                 _validator = validator;
             }
-
+            /// <summary>
+            /// handle the customer creation event
+            /// </summary>
+            /// <param name="request"></param>
+            /// <param name="cancellationToken"></param>
+            /// <returns></returns>
+            /// <exception cref="ValidationException"></exception>
             public async Task<CustomerDto> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
             {
                 _logger.LogInformation("Creating New Customer");
