@@ -10,6 +10,7 @@ namespace SalesManagementService.Domain.Common
     public interface IUnitOfWork
     {
         ICustomerRepository Customer { get; }
+        ISalesOrderRepository SalesOrder { get; }
         
 
         //ICustomerPaymentRepository CustomerPaymentRepository { get; }

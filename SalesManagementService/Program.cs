@@ -30,6 +30,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ITenantService, TenantService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ISalesOrderRepository, SalesOrderRepository>();
 builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
 builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection("KafkaSettings"));
 
@@ -195,12 +196,13 @@ app.UseCors();
 // Enable middleware to catch unhandled exceptions
 app.UseSerilogRequestLogging();  // Enable Serilog request logging
 
-app.MapCustomerEndpoints();
-
 //app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.MapCustomerEndpoints();
+app.MapSalesOrderEndpoints();
 
 app.MapControllers();
 
