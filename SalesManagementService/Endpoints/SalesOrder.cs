@@ -39,7 +39,7 @@ namespace SalesManagementService.API.Endpoints
                 .WithName("GetAllSalesOrders")
                 .WithDisplayName("Get All Sales Orders");
 
-            return webApplication;
+           return webApplication;
         }
 
         private static async Task<IResult> CreateSalesOrder(CreateSalesOrderDto dto, ILogger<Program> logger, IMediator mediator, IValidator<CreateSalesOrderCommand> validator)
