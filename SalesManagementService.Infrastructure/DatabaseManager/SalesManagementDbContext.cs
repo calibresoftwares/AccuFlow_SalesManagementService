@@ -20,6 +20,8 @@ namespace SalesManagementService.Infrastructure.DatabaseManager
             _httpContextAccessor = httpContextAccessor;
         }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<SalesOrder> SalesOrders { get; set; }
+        public DbSet<SalesOrderLineItem> SalesOrderLineItems { get; set; }
         
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
