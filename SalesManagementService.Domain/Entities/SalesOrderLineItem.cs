@@ -12,10 +12,12 @@ namespace SalesManagementService.Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int LineItemId { get; set; }
+        public int Id { get; set; }
+
+        public Guid LineItemId { get; set; } = Guid.NewGuid();
 
         [Required]
-        public int SalesOrderId { get; set; }
+        public Guid SalesOrderId { get; set; }
 
         [Required]
         public int ProductId { get; set; } // From Inventory Service

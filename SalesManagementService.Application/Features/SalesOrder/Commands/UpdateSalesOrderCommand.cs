@@ -52,27 +52,83 @@ namespace SalesManagementService.Application.Features.SalesOrder.Commands
             existingSalesOrder.OrderDate = request.SalesOrderDto.OrderDate;
             existingSalesOrder.Status = request.SalesOrderDto.Status;
             existingSalesOrder.UpdatedDate = DateTime.UtcNow;
+            
+            // Update OrderNumber if provided
+            if (!string.IsNullOrEmpty(request.SalesOrderDto.OrderNumber))
+            {
+                existingSalesOrder.OrderNumber = request.SalesOrderDto.OrderNumber;
+            }
+
+            // Update order-level financial fields if provided (before line items calculation)
+            // These will be recalculated from line items if line items are provided
+            existingSalesOrder.TotalAmount = request.SalesOrderDto.TotalAmount;
+            existingSalesOrder.Discount = request.SalesOrderDto.Discount;
+            existingSalesOrder.Tax = request.SalesOrderDto.Tax;
+            existingSalesOrder.NetAmount = request.SalesOrderDto.NetAmount;
 
             // Update line items
             if (request.SalesOrderDto.SalesOrderLineItems != null && request.SalesOrderDto.SalesOrderLineItems.Any())
             {
+                // Get existing line items to check for updates
+                var existingLineItems = existingSalesOrder.LineItems?.ToList() ?? new List<SalesOrderLineItem>();
+                
+                // Clear existing line items and rebuild from DTO
                 existingSalesOrder.LineItems = new List<SalesOrderLineItem>();
+                
                 foreach (var lineItemDto in request.SalesOrderDto.SalesOrderLineItems)
                 {
                     var lineItem = _mapper.Map<SalesOrderLineItem>(lineItemDto);
-                    lineItem.SalesOrderId = existingSalesOrder.SalesOrderId;
-                    lineItem.TenantId = existingSalesOrder.TenantId;
-                    lineItem.UpdatedDate = DateTime.UtcNow;
                     
-                    // Calculate line item total
-                    lineItem.Total = CalculateLineItemTotal(lineItem.Quantity, lineItem.UnitPrice, lineItem.Discount, lineItem.Tax);
+                    // Check if this line item already exists (by LineItemId)
+                    var existingLineItem = existingLineItems.FirstOrDefault(li => li.LineItemId == lineItemDto.LineItemId);
                     
-                    existingSalesOrder.LineItems.Add(lineItem);
+                    if (existingLineItem != null)
+                    {
+                        // Update existing line item properties
+                        existingLineItem.ProductId = lineItem.ProductId;
+                        existingLineItem.Quantity = lineItem.Quantity;
+                        existingLineItem.UnitPrice = lineItem.UnitPrice;
+                        existingLineItem.Discount = lineItem.Discount;
+                        existingLineItem.Tax = lineItem.Tax;
+                        existingLineItem.UpdatedDate = DateTime.UtcNow;
+                        
+                        // Calculate line item total
+                        existingLineItem.Total = CalculateLineItemTotal(existingLineItem.Quantity, existingLineItem.UnitPrice, existingLineItem.Discount, existingLineItem.Tax);
+                        
+                        existingSalesOrder.LineItems.Add(existingLineItem);
+                    }
+                    else
+                    {
+                        // Create new line item
+                        // Generate LineItemId if not already set
+                        if (lineItem.LineItemId == Guid.Empty)
+                        {
+                            lineItem.LineItemId = Guid.NewGuid();
+                        }
+                        lineItem.SalesOrderId = existingSalesOrder.SalesOrderId;
+                        lineItem.TenantId = existingSalesOrder.TenantId;
+                        lineItem.CreatedDate = DateTime.UtcNow;
+                        lineItem.UpdatedDate = DateTime.UtcNow;
+                        
+                        // Calculate line item total
+                        lineItem.Total = CalculateLineItemTotal(lineItem.Quantity, lineItem.UnitPrice, lineItem.Discount, lineItem.Tax);
+                        
+                        existingSalesOrder.LineItems.Add(lineItem);
+                    }
                 }
+                
+                // Recalculate order totals from line items (overrides the values set above)
+                CalculateOrderTotals(existingSalesOrder);
             }
-
-            // Recalculate order totals
-            CalculateOrderTotals(existingSalesOrder);
+            else
+            {
+                // If no line items provided, clear existing line items and ensure NetAmount is calculated correctly
+                if (existingSalesOrder.LineItems != null && existingSalesOrder.LineItems.Any())
+                {
+                    existingSalesOrder.LineItems.Clear();
+                }
+                existingSalesOrder.NetAmount = existingSalesOrder.TotalAmount - existingSalesOrder.Discount + existingSalesOrder.Tax;
+            }
 
             await _unitOfWork.SalesOrder.UpdateAsync(existingSalesOrder);
             await _unitOfWork.CommitAsync(cancellationToken);
@@ -96,6 +152,11 @@ namespace SalesManagementService.Application.Features.SalesOrder.Commands
                 salesOrder.TotalAmount = salesOrder.LineItems.Sum(li => li.Quantity * li.UnitPrice);
                 salesOrder.Discount = salesOrder.LineItems.Sum(li => li.Discount);
                 salesOrder.Tax = salesOrder.LineItems.Sum(li => li.Tax);
+                salesOrder.NetAmount = salesOrder.TotalAmount - salesOrder.Discount + salesOrder.Tax;
+            }
+            else
+            {
+                // If no line items, ensure NetAmount is calculated from TotalAmount, Discount, and Tax
                 salesOrder.NetAmount = salesOrder.TotalAmount - salesOrder.Discount + salesOrder.Tax;
             }
         }

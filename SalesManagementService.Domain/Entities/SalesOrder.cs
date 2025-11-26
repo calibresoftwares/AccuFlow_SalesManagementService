@@ -12,7 +12,8 @@ namespace SalesManagementService.Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int SalesOrderId { get; set; }
+        public int Id { get; set; }
+        public Guid SalesOrderId { get; set; } = Guid.NewGuid();
 
         public string OrderNumber { get; set; } = string.Empty;
 

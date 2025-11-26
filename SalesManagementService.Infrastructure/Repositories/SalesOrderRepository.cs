@@ -33,11 +33,18 @@ namespace SalesManagementService.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> DeleteAsync(int salesOrderId)
+        public async Task<bool> DeleteAsync(Guid salesOrderId)
         {
-            var removeSalesOrder = _dbContext.SalesOrders.Find(salesOrderId);
+            var removeSalesOrder = await _dbContext.SalesOrders
+                .Include(so => so.LineItems)
+                .FirstOrDefaultAsync(so => so.SalesOrderId == salesOrderId);
             if (removeSalesOrder != null)
             {
+                // Remove line items first
+                if (removeSalesOrder.LineItems != null && removeSalesOrder.LineItems.Any())
+                {
+                    _dbContext.SalesOrderLineItems.RemoveRange(removeSalesOrder.LineItems);
+                }
                 _dbContext.SalesOrders.Remove(removeSalesOrder);
                 await _dbContext.SaveChangesAsync();
 
@@ -46,7 +53,7 @@ namespace SalesManagementService.Infrastructure.Repositories
             return false;
         }
 
-        public async Task<SalesOrder> GetByIdAsync(int salesOrderId)
+        public async Task<SalesOrder> GetByIdAsync(Guid salesOrderId)
         {
             return await _dbContext.SalesOrders
                 .Include(so => so.LineItems)

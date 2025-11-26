@@ -14,15 +14,16 @@ namespace SalesManagementService.Domain.DTOs.SalesOrder
         
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
         
-        [Required]
-        public DateTime ExpectedDeliveryDate { get; set; }
+        public string OrderNumber { get; set; }
         
         [Required]
         public decimal TotalAmount { get; set; }
         
-        public string Status { get; set; } = "Pending";
+        public decimal Discount { get; set; } = 0;
         
-        public string CreatedBy { get; set; }
+        public decimal Tax { get; set; } = 0;
+        
+        public string Status { get; set; } = "Pending";
         
         public Guid TenantId { get; set; }
         
