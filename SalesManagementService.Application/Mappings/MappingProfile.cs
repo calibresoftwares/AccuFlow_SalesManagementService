@@ -20,9 +20,14 @@ namespace SalesManagementService.Application.Mappings
             CreateMap<CreateCustomerDto, Customer>();
             
             // SalesOrder mappings
-            CreateMap<SalesOrder, SalesOrderDto>().ReverseMap();
-            CreateMap<SalesOrderDto, SalesOrder>();
-            CreateMap<CreateSalesOrderDto, SalesOrder>();
+            CreateMap<SalesOrder, SalesOrderDto>()
+                .ForMember(dest => dest.SalesOrderLineItems, opt => opt.MapFrom(src => src.LineItems))
+                .ReverseMap()
+                .ForMember(dest => dest.LineItems, opt => opt.MapFrom(src => src.SalesOrderLineItems));
+            CreateMap<SalesOrderDto, SalesOrder>()
+                .ForMember(dest => dest.LineItems, opt => opt.MapFrom(src => src.SalesOrderLineItems));
+            CreateMap<CreateSalesOrderDto, SalesOrder>()
+                .ForMember(dest => dest.LineItems, opt => opt.MapFrom(src => src.SalesOrderLineItems));
             CreateMap<SalesOrderLineItem, SalesOrderLineItemDto>().ReverseMap();
             CreateMap<SalesOrderLineItemDto, SalesOrderLineItem>();
             CreateMap<CreateSalesOrderLineItemDto, SalesOrderLineItem>();

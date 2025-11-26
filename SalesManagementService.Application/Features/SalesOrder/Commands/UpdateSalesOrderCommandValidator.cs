@@ -8,8 +8,8 @@ namespace SalesManagementService.Application.Features.SalesOrder.Commands
         public UpdateSalesOrderCommandValidator()
         {
             RuleFor(x => x.SalesOrderDto.SalesOrderId)
-                .GreaterThan(0)
-                .WithMessage("Sales Order ID is required and must be greater than 0.");
+                .NotEmpty()
+                .WithMessage("Sales Order ID is required.");
 
             RuleFor(x => x.SalesOrderDto.CustomerId)
                 .GreaterThan(0)
@@ -18,6 +18,22 @@ namespace SalesManagementService.Application.Features.SalesOrder.Commands
             RuleFor(x => x.SalesOrderDto.OrderDate)
                 .NotEmpty()
                 .WithMessage("Order Date is required.");
+
+            RuleFor(x => x.SalesOrderDto.TotalAmount)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("Total Amount must be greater than or equal to 0.");
+
+            RuleFor(x => x.SalesOrderDto.Discount)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("Discount must be greater than or equal to 0.");
+
+            RuleFor(x => x.SalesOrderDto.Tax)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("Tax must be greater than or equal to 0.");
+
+            RuleFor(x => x.SalesOrderDto.NetAmount)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("Net Amount must be greater than or equal to 0.");
 
             RuleFor(x => x.SalesOrderDto.Status)
                 .NotEmpty()

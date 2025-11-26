@@ -11,8 +11,8 @@ namespace SalesManagementService.Domain.Interfaces
     {
         Task<List<SalesOrder>> GetSalesOrdersAsync();
         Task<SalesOrder> AddAsync(SalesOrder salesOrder);
-        Task<SalesOrder> GetByIdAsync(int salesOrderId);
+        Task<SalesOrder> GetByIdAsync(Guid salesOrderId);
         Task<SalesOrder> UpdateAsync(SalesOrder salesOrder);
-        Task<bool> DeleteAsync(int salesOrderId);
+        Task<bool> DeleteAsync(Guid salesOrderId);
     }
 }

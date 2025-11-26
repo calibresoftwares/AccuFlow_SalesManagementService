@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SalesManagementService.Infrastructure.DatabaseManager;
@@ -11,9 +12,11 @@ using SalesManagementService.Infrastructure.DatabaseManager;
 namespace SalesManagementService.Infrastructure.Migrations
 {
     [DbContext(typeof(SalesManagementDbContext))]
-    partial class SalesManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251124180715_update_SalesOrders_Model")]
+    partial class update_SalesOrders_Model
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,10 +111,7 @@ namespace SalesManagementService.Infrastructure.Migrations
             modelBuilder.Entity("SalesManagementService.Domain.Entities.SalesOrder", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -161,10 +161,7 @@ namespace SalesManagementService.Infrastructure.Migrations
             modelBuilder.Entity("SalesManagementService.Domain.Entities.SalesOrderLineItem", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
