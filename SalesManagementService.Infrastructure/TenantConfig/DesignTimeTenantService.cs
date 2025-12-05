@@ -21,10 +21,16 @@ namespace SalesManagementService.Infrastructure.TenantConfig
             };
         }
         //public Tenant GetTenant() => _tenant;
+        Guid ITenantService.TenantId => throw new NotImplementedException();
 
         public Task<Domain.TenantSettings.Tenant> GetConnectionStringAsync()
         {
             return Task.FromResult(new Tenant { ConnectionString = _tenant.ConnectionString, TenantId = _tenant.TenantId });
+        }
+
+        public Guid GetTenantId()
+        {
+            return Guid.Parse("00000000-0000-0000-0000-000000000000");
         }
     }
 }

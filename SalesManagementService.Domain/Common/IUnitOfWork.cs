@@ -11,6 +11,7 @@ namespace SalesManagementService.Domain.Common
     {
         ICustomerRepository Customer { get; }
         ISalesOrderRepository SalesOrder { get; }
+        ISalesInvoiceRepository SalesInvoice { get; }
         
 
         //ICustomerPaymentRepository CustomerPaymentRepository { get; }
