@@ -40,6 +40,7 @@ namespace SalesManagementService.API.Endpoints
                 .WithDisplayName("Get All Sales Invoices");
 
            return webApplication;
+
         }
 
         private static async Task<IResult> CreateSalesInvoice(CreateSalesInvoiceDto dto, ILogger<Program> logger, IMediator mediator, IValidator<CreateSalesInvoiceCommand> validator)
