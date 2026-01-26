@@ -20,12 +20,10 @@ namespace SalesManagementService.API.Endpoints
                 => await CreateCustomer(dto, logger, mediator))
                 .WithName("CreateCustomer")
                 .WithDisplayName("Create Customer");
-
             
             _ = customerGroup.MapPost("delete/{id:int}", [Authorize(Roles = "SuperAdmin,Admin")] (int id, ILogger<Program> logger, IMediator mediator) => DeleteCustomer(id, logger, mediator))
                 .WithName("DeleteCustomer")
                 .WithDisplayName("DeleteCustomer");
-
 
             _ = customerGroup.MapPut("update", [Authorize(Roles = "SuperAdmin,Admin")] (CustomerDto dto, ILogger<Program> logger, IMediator mediator) => UpdateCustomer(dto, logger, mediator))
                 .WithName("UpdateCustomer")

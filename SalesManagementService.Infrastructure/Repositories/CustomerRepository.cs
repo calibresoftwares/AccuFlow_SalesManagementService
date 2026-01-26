@@ -27,7 +27,7 @@ namespace SalesManagementService.Infrastructure.Repositories
                 await _dbContext.SaveChangesAsync();
                 return customer;
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }
@@ -59,7 +59,7 @@ namespace SalesManagementService.Infrastructure.Repositories
         public async Task<Customer> UpdateAsync(Customer customer)
         {
             _dbContext.Customers.Update(customer);
-            await _context.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
             return customer;
         }
     }

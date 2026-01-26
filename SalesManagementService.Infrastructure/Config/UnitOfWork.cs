@@ -18,6 +18,7 @@ namespace SalesManagementService.Infrastructure.Config
         private readonly IKafkaProducerService _kafkaProducerService;
 
         ICustomerRepository _customerRepository;
+        ISalesOrderRepository _salesOrderRepository;
         //IGoodsReceivedNoteRepository _goodsReceivedNoteRepository;
         //ICustomerPaymentRepository _customerPaymentRepository;
 
@@ -28,6 +29,7 @@ namespace SalesManagementService.Infrastructure.Config
         }
 
         public ICustomerRepository Customer => _customerRepository = _customerRepository ?? new CustomerRepository(_salesManagementDbContext);
+        public ISalesOrderRepository SalesOrder => _salesOrderRepository = _salesOrderRepository ?? new SalesOrderRepository(_salesManagementDbContext);
 
        public int Commit()
         {
