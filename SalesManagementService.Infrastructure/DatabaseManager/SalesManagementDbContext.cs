@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace SalesManagementService.Infrastructure.DatabaseManager
         public DbSet<Customer> Customers { get; set; }
         public DbSet<SalesOrder> SalesOrders { get; set; }
         public DbSet<SalesOrderLineItem> SalesOrderLineItems { get; set; }
+        public DbSet<SalesInvoice> SalesInvoices { get; set; }
+        public DbSet<SalesInvoiceLineItem> SalesInvoiceLineItems { get; set; }
         
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

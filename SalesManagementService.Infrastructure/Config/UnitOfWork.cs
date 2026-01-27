@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -19,6 +19,7 @@ namespace SalesManagementService.Infrastructure.Config
 
         ICustomerRepository _customerRepository;
         ISalesOrderRepository _salesOrderRepository;
+        ISalesInvoiceRepository _salesInvoiceRepository;
         //IGoodsReceivedNoteRepository _goodsReceivedNoteRepository;
         //ICustomerPaymentRepository _customerPaymentRepository;
 
@@ -30,6 +31,7 @@ namespace SalesManagementService.Infrastructure.Config
 
         public ICustomerRepository Customer => _customerRepository = _customerRepository ?? new CustomerRepository(_salesManagementDbContext);
         public ISalesOrderRepository SalesOrder => _salesOrderRepository = _salesOrderRepository ?? new SalesOrderRepository(_salesManagementDbContext);
+        public ISalesInvoiceRepository SalesInvoice => _salesInvoiceRepository = _salesInvoiceRepository ?? new SalesInvoiceRepository(_salesManagementDbContext);
 
        public int Commit()
         {

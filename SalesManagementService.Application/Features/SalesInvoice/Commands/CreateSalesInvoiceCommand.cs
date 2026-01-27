@@ -73,8 +73,12 @@ namespace SalesManagementService.Application.Features.SalesInvoice.Commands
                     lineItem.CreatedDate = DateTime.UtcNow;
                     lineItem.UpdatedDate = DateTime.UtcNow;
                     
+                    // Calculate tax amount from tax percentage
+                    var subtotal = lineItem.Quantity * lineItem.UnitPrice;
+                    lineItem.TaxAmount = (subtotal * lineItem.TaxPercentage / 100);
+                    
                     // Calculate line item total
-                    lineItem.Total = CalculateLineItemTotal(lineItem.Quantity, lineItem.UnitPrice, lineItem.Discount, lineItem.TaxAmount);
+                    lineItem.Total = CalculateLineItemTotal(lineItem.Quantity, lineItem.UnitPrice, lineItem.Discount, lineItem.TaxPercentage);
                     
                     salesInvoice.LineItems.Add(lineItem);
                 }

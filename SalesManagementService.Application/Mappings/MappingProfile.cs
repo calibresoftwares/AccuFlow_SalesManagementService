@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime;
@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using SalesManagementService.Domain.Entities;
 using SalesManagementService.Domain.DTOs.Customer;
 using SalesManagementService.Domain.DTOs.SalesOrder;
+using SalesManagementService.Domain.DTOs.SalesInvoice;
 
 namespace SalesManagementService.Application.Mappings
 {
@@ -27,6 +28,13 @@ namespace SalesManagementService.Application.Mappings
             CreateMap<SalesOrderLineItemDto, SalesOrderLineItem>();
             CreateMap<CreateSalesOrderLineItemDto, SalesOrderLineItem>();
           
+            // SalesInvoice mappings
+            CreateMap<SalesInvoice, SalesInvoiceDto>().ReverseMap();
+            CreateMap<SalesInvoiceDto, SalesInvoice>();
+            CreateMap<CreateSalesInvoiceDto, SalesInvoice>();
+            CreateMap<SalesInvoiceLineItem, SalesInvoiceLineItemDto>().ReverseMap();
+            CreateMap<SalesInvoiceLineItemDto, SalesInvoiceLineItem>();
+            CreateMap<CreateSalesInvoiceLineItemDto, SalesInvoiceLineItem>();
 
 
         }

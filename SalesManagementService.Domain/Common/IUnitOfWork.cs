@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +11,7 @@ namespace SalesManagementService.Domain.Common
     {
         ICustomerRepository Customer { get; }
         ISalesOrderRepository SalesOrder { get; }
+        ISalesInvoiceRepository SalesInvoice { get; }
         
 
         //ICustomerPaymentRepository CustomerPaymentRepository { get; }
