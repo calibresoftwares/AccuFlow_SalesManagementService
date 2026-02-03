@@ -1,13 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace SalesManagementService.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class update_SalesOrder_Model : Migration
+    public partial class update_SalesOrders_Model : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,8 +15,8 @@ namespace SalesManagementService.Infrastructure.Migrations
                 name: "SalesOrders",
                 columns: table => new
                 {
-                    SalesOrderId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    SalesOrderId = table.Column<Guid>(type: "uuid", nullable: false),
                     OrderNumber = table.Column<string>(type: "text", nullable: false, collation: "case_insensitive"),
                     CustomerId = table.Column<int>(type: "integer", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -32,16 +31,16 @@ namespace SalesManagementService.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SalesOrders", x => x.SalesOrderId);
+                    table.PrimaryKey("PK_SalesOrders", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "SalesOrderLineItems",
                 columns: table => new
                 {
-                    LineItemId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    SalesOrderId = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    LineItemId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SalesOrderId = table.Column<Guid>(type: "uuid", nullable: false),
                     ProductId = table.Column<int>(type: "integer", nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
                     UnitPrice = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
@@ -50,23 +49,24 @@ namespace SalesManagementService.Infrastructure.Migrations
                     Total = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    SalesOrderId1 = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SalesOrderLineItems", x => x.LineItemId);
+                    table.PrimaryKey("PK_SalesOrderLineItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SalesOrderLineItems_SalesOrders_SalesOrderId",
-                        column: x => x.SalesOrderId,
+                        name: "FK_SalesOrderLineItems_SalesOrders_SalesOrderId1",
+                        column: x => x.SalesOrderId1,
                         principalTable: "SalesOrders",
-                        principalColumn: "SalesOrderId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_SalesOrderLineItems_SalesOrderId",
+                name: "IX_SalesOrderLineItems_SalesOrderId1",
                 table: "SalesOrderLineItems",
-                column: "SalesOrderId");
+                column: "SalesOrderId1");
         }
 
         /// <inheritdoc />

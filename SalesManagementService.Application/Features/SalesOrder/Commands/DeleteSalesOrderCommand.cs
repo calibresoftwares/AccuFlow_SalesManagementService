@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SalesManagementService.Application.Features.SalesOrder.Commands
 {
-    public record DeleteSalesOrderCommand(int SalesOrderId) : IRequest<bool>;
+    public record DeleteSalesOrderCommand(Guid SalesOrderId) : IRequest<bool>;
 
     public class DeleteSalesOrderCommandHandler : IRequestHandler<DeleteSalesOrderCommand, bool>
     {

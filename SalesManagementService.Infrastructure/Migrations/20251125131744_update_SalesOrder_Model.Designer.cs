@@ -12,7 +12,7 @@ using SalesManagementService.Infrastructure.DatabaseManager;
 namespace SalesManagementService.Infrastructure.Migrations
 {
     [DbContext(typeof(SalesManagementDbContext))]
-    [Migration("20251105210540_update_SalesOrder_Model")]
+    [Migration("20251125131744_update_SalesOrder_Model")]
     partial class update_SalesOrder_Model
     {
         /// <inheritdoc />
@@ -110,11 +110,11 @@ namespace SalesManagementService.Infrastructure.Migrations
 
             modelBuilder.Entity("SalesManagementService.Domain.Entities.SalesOrder", b =>
                 {
-                    b.Property<int>("SalesOrderId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SalesOrderId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -136,6 +136,9 @@ namespace SalesManagementService.Infrastructure.Migrations
                         .HasColumnType("text")
                         .UseCollation("case_insensitive");
 
+                    b.Property<Guid>("SalesOrderId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text")
@@ -153,18 +156,18 @@ namespace SalesManagementService.Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("SalesOrderId");
+                    b.HasKey("Id");
 
                     b.ToTable("SalesOrders");
                 });
 
             modelBuilder.Entity("SalesManagementService.Domain.Entities.SalesOrderLineItem", b =>
                 {
-                    b.Property<int>("LineItemId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("LineItemId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -172,13 +175,19 @@ namespace SalesManagementService.Infrastructure.Migrations
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<Guid>("LineItemId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.Property<int>("SalesOrderId")
+                    b.Property<Guid>("SalesOrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SalesOrderId1")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("Tax")
@@ -196,9 +205,9 @@ namespace SalesManagementService.Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("LineItemId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("SalesOrderId");
+                    b.HasIndex("SalesOrderId1");
 
                     b.ToTable("SalesOrderLineItems");
                 });
@@ -207,7 +216,7 @@ namespace SalesManagementService.Infrastructure.Migrations
                 {
                     b.HasOne("SalesManagementService.Domain.Entities.SalesOrder", "SalesOrder")
                         .WithMany("LineItems")
-                        .HasForeignKey("SalesOrderId")
+                        .HasForeignKey("SalesOrderId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

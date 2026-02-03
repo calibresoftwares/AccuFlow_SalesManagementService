@@ -19,6 +19,42 @@ namespace SalesManagementService.Infrastructure.TenantConfig
         private readonly HttpClient _httpClient;
         private Tenant _currentTenant;
 
+        public Guid TenantId
+        {
+            get
+            {
+                var tenantId = GetTenantId();
+                return tenantId != null ? tenantId : Guid.Empty;
+            }
+        }
+
+        public Guid GetTenantId()
+        {
+            var httpContext = _httpContextcontextAccessor.HttpContext;
+            if (httpContext == null || !httpContext.Request.Headers.TryGetValue("Authorization", out var authHeader))
+            {
+                throw new Exception("Authorization header is missing.");
+            }
+
+            // Parse the token (Bearer <token>)
+            var token = authHeader.ToString().Replace("Bearer ", string.Empty);
+
+            // Extract tenant ID from the token
+            var tenantIdClaim = ExtractTenantIdFromToken(token);
+            //var tenantIdClaim = _httpContextcontextAccessor.HttpContext?.User?.FindFirst("tenantId");
+            if (tenantIdClaim != null)
+            {
+                return Guid.Parse(tenantIdClaim);
+            }
+
+            // fallback: header
+            if (_httpContextcontextAccessor.HttpContext?.Request.Headers.TryGetValue("X-TenantId", out var tenantHeader) == true)
+            {
+                return Guid.Parse(tenantHeader);
+            }
+
+            throw new Exception("TenantId not found in request");
+        }
         public TenantService(IMemoryCache cache, HttpClient httpClient, IHttpContextAccessor httpContextcontextAccessor)
         {
             _cache = cache;
@@ -121,22 +157,25 @@ namespace SalesManagementService.Infrastructure.TenantConfig
     }
 
     // ✅ Mock Tenant Service for Migrations
-    public class MockTenantService : ITenantService
-    {
-        private readonly string _connectionString;
+    //public class MockTenantService : ITenantService
+    //{
+    //    private readonly string _connectionString;
 
-        public MockTenantService(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+    //    public MockTenantService(string connectionString)
+    //    {
+    //        _connectionString = connectionString;
+    //    }
 
-        public Task<Tenant> GetConnectionStringAsync()
-        {
-            return Task.FromResult(new Tenant
-            {
-                ConnectionString = _connectionString,
-                TenantId = Guid.Parse("00000000-0000-0000-0000-000000000000")
-            });
-        }
-    }
+    //    public Task<Tenant> GetConnectionStringAsync()
+    //    {
+    //        return Task.FromResult(new Tenant
+    //        {
+    //            ConnectionString = _connectionString,
+    //            TenantId = Guid.Parse("00000000-0000-0000-0000-000000000000")
+    //        });
+    //    }
+
+        
+
+    //}
 }

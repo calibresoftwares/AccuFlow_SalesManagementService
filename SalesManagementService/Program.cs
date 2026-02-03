@@ -31,6 +31,7 @@ builder.Services.AddTransient<ITenantService, TenantService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ISalesOrderRepository, SalesOrderRepository>();
+builder.Services.AddScoped<ISalesInvoiceRepository, SalesInvoiceRepository>();
 builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
 builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection("KafkaSettings"));
 
@@ -203,6 +204,7 @@ app.UseAuthorization();
 
 app.MapCustomerEndpoints();
 app.MapSalesOrderEndpoints();
+app.MapSalesInvoiceEndpoints();
 
 app.MapControllers();
 

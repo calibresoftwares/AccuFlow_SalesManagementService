@@ -10,5 +10,10 @@ namespace SalesManagementService.Domain.Interfaces
     public interface ITenantService
     {
         public Task<Tenant> GetConnectionStringAsync();
+
+        public Guid GetTenantId();
+
+        Guid TenantId { get; }
+
     }
 }

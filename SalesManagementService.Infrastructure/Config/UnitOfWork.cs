@@ -17,19 +17,25 @@ namespace SalesManagementService.Infrastructure.Config
        
         private readonly IKafkaProducerService _kafkaProducerService;
 
+        private readonly ITenantService _tenantService;
+
         ICustomerRepository _customerRepository;
         ISalesOrderRepository _salesOrderRepository;
+        ISalesInvoiceRepository _salesInvoiceRepository;
+       
         //IGoodsReceivedNoteRepository _goodsReceivedNoteRepository;
         //ICustomerPaymentRepository _customerPaymentRepository;
 
-        public UnitOfWork(SalesManagementDbContext salesManagementDbContext, IKafkaProducerService kafkaProducerService)
+        public UnitOfWork(SalesManagementDbContext salesManagementDbContext, IKafkaProducerService kafkaProducerService, ITenantService tenantService)
         {
             _salesManagementDbContext = salesManagementDbContext;
             _kafkaProducerService = kafkaProducerService;
+            _tenantService = tenantService;
         }
 
         public ICustomerRepository Customer => _customerRepository = _customerRepository ?? new CustomerRepository(_salesManagementDbContext);
         public ISalesOrderRepository SalesOrder => _salesOrderRepository = _salesOrderRepository ?? new SalesOrderRepository(_salesManagementDbContext);
+        public ISalesInvoiceRepository SalesInvoice => _salesInvoiceRepository = _salesInvoiceRepository ?? new SalesInvoiceRepository(_salesManagementDbContext,_tenantService);
 
        public int Commit()
         {

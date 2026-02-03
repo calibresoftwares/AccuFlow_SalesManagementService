@@ -24,12 +24,12 @@ namespace SalesManagementService.API.Endpoints
                 .WithName("UpdateSalesOrder")
                 .WithDisplayName("Update Sales Order");
 
-            salesOrderGroup.MapDelete("delete/{id:int}", [Authorize(Roles = "SuperAdmin,Admin")] async (int id, ILogger<Program> logger, IMediator mediator)
+            salesOrderGroup.MapDelete("delete/{id:guid}", [Authorize(Roles = "SuperAdmin,Admin")] async (Guid id, ILogger<Program> logger, IMediator mediator)
                 => await DeleteSalesOrder(id, logger, mediator))
                 .WithName("DeleteSalesOrder")
                 .WithDisplayName("Delete Sales Order");
 
-            salesOrderGroup.MapGet("{id:int}", [Authorize(Roles = "SuperAdmin,Admin")] async (int id, ILogger<Program> logger, IMediator mediator)
+            salesOrderGroup.MapGet("{id:guid}", [Authorize(Roles = "SuperAdmin,Admin")] async (Guid id, ILogger<Program> logger, IMediator mediator)
                 => await GetSalesOrder(id, logger, mediator))
                 .WithName("GetSalesOrder")
                 .WithDisplayName("Get Sales Order");
@@ -85,7 +85,7 @@ namespace SalesManagementService.API.Endpoints
             }
         }
 
-        private static async Task<IResult> DeleteSalesOrder(int id, ILogger<Program> logger, IMediator mediator)
+        private static async Task<IResult> DeleteSalesOrder(Guid id, ILogger<Program> logger, IMediator mediator)
         {
             logger.LogInformation($"Deleting sales order with ID {id}");
             try
@@ -101,7 +101,7 @@ namespace SalesManagementService.API.Endpoints
             }
         }
 
-        private static async Task<IResult> GetSalesOrder(int id, ILogger<Program> logger, IMediator mediator)
+        private static async Task<IResult> GetSalesOrder(Guid id, ILogger<Program> logger, IMediator mediator)
         {
             logger.LogInformation($"Fetching sales order with ID {id}");
             try

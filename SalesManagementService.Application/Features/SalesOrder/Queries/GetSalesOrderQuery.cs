@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SalesManagementService.Application.Features.SalesOrder.Queries
 {
-    public record GetSalesOrderQuery(int Id) : IRequest<SalesOrderDto>;
+    public record GetSalesOrderQuery(Guid Id) : IRequest<SalesOrderDto>;
 
     public class GetSalesOrderQueryHandler : IRequestHandler<GetSalesOrderQuery, SalesOrderDto>
     {

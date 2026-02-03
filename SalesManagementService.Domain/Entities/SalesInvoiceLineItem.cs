@@ -8,40 +8,45 @@ using System.Threading.Tasks;
 
 namespace SalesManagementService.Domain.Entities
 {
-    public class SalesOrderLineItem
+    public class SalesInvoiceLineItem
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public Guid LineItemId { get; set; } = Guid.NewGuid();
+        public Guid SalesInvoiceLineItemId { get; set; } = Guid.NewGuid();
 
-        [Required]
-        public Guid SalesOrderId { get; set; }
+        public Guid SalesInvoiceId { get; set; } // Link to SalesInvoice Parent
 
-        [Required]
-        public int ProductId { get; set; } // From Inventory Service
+        public Guid ProductId { get; set; }
 
-        [Required]
-        public int Quantity { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Quantity { get; set; } // Delivered / Final billed qty
 
-        [Required, Column(TypeName = "decimal(18,2)")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal UnitPrice { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal Discount { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal Tax { get; set; }
+        public decimal TaxAmount { get; set; }
 
-        [Required, Column(TypeName = "decimal(18,2)")]
-        public decimal Total { get; set; } // (Quantity * UnitPrice) - Discount + Tax
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Total { get; set; } // (Qty * Price - Discount + Tax)
 
         public Guid TenantId { get; set; }
+
+        public Guid CreatedBy { get; set; }
+
+        public Guid UpdatedBy { get; set; }
+
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+
         public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
 
-        // Navigation properties
-        public SalesOrder SalesOrder { get; set; }
+        // Navigation
+        public SalesInvoice SalesInvoice { get; set; }
     }
 }
+

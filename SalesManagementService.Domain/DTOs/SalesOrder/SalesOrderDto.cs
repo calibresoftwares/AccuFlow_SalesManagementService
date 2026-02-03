@@ -9,13 +9,15 @@ namespace SalesManagementService.Domain.DTOs.SalesOrder
 {
     public class SalesOrderDto
     {
-        public int SalesOrderId { get; set; }
+        public Guid SalesOrderId { get; set; }
+        public string OrderNumber { get; set; }
         public int CustomerId { get; set; }
         public DateTime OrderDate { get; set; }
-        public DateTime ExpectedDeliveryDate { get; set; }
         public decimal TotalAmount { get; set; }
+        public decimal Discount { get; set; }
+        public decimal Tax { get; set; }
+        public decimal NetAmount { get; set; }
         public string Status { get; set; }
-        public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public Guid TenantId { get; set; }

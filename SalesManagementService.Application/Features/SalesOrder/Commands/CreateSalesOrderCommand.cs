@@ -42,6 +42,12 @@ namespace SalesManagementService.Application.Features.SalesOrder.Commands
 
             var salesOrder = _mapper.Map<SalesManagementService.Domain.Entities.SalesOrder>(request.SalesOrderDto);
             
+            // Generate SalesOrderId if not already set
+            if (salesOrder.SalesOrderId == Guid.Empty)
+            {
+                salesOrder.SalesOrderId = Guid.NewGuid();
+            }
+            
             // Generate Order Number if not provided
             if (string.IsNullOrEmpty(salesOrder.OrderNumber))
             {
@@ -55,7 +61,12 @@ namespace SalesManagementService.Application.Features.SalesOrder.Commands
                 foreach (var lineItemDto in request.SalesOrderDto.SalesOrderLineItems)
                 {
                     var lineItem = _mapper.Map<SalesOrderLineItem>(lineItemDto);
-                    lineItem.SalesOrderId = salesOrder.SalesOrderId; // Will be set after save
+                    // Generate LineItemId if not already set
+                    if (lineItem.LineItemId == Guid.Empty)
+                    {
+                        lineItem.LineItemId = Guid.NewGuid();
+                    }
+                    lineItem.SalesOrderId = salesOrder.SalesOrderId;
                     lineItem.TenantId = salesOrder.TenantId;
                     
                     // Calculate line item total

@@ -15,15 +15,17 @@ namespace SalesManagementService.Application.Features.SalesOrder.Commands
                 .NotEmpty()
                 .WithMessage("Order Date is required.");
 
-            RuleFor(x => x.SalesOrderDto.ExpectedDeliveryDate)
-                .NotEmpty()
-                .WithMessage("Expected Delivery Date is required.")
-                .GreaterThan(x => x.SalesOrderDto.OrderDate)
-                .WithMessage("Expected Delivery Date must be after Order Date.");
-
             RuleFor(x => x.SalesOrderDto.TotalAmount)
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("Total Amount must be greater than or equal to 0.");
+
+            RuleFor(x => x.SalesOrderDto.Discount)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("Discount must be greater than or equal to 0.");
+
+            RuleFor(x => x.SalesOrderDto.Tax)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("Tax must be greater than or equal to 0.");
 
             RuleFor(x => x.SalesOrderDto.Status)
                 .NotEmpty()
